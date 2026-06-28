@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+/* ── BhuMe design tokens — matches hiring.bhume.in ─────────────────────────── */
+:root {
+  --bg-base:      #0d1117;
+  --bg-card:      #161b22;
+  --bg-card2:     #1c2128;
+  --bg-hover:     #21262d;
+  --border:       #30363d;
+  --text-primary: #e6edf3;
+  --text-muted:   #8b949e;
+  --text-dim:     #484f58;
+  --accent-green: #3fb950;
+  --accent-blue:  #58a6ff;
+  --accent-orange:#f0883e;
+  --accent-red:   #f85149;
+  --cta-from:     #1f6feb;
+  --cta-to:       #388bfd;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root { height: 100%; }
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+a { color: var(--accent-blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* maplibre overrides */
+.maplibregl-map { font-family: inherit; }
+.maplibregl-popup-content {
+  background: var(--bg-card2);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  box-shadow: 0 4px 24px #0008;
+}
+.maplibregl-popup-tip { border-top-color: var(--bg-card2) !important; }
+.maplibregl-ctrl-group { background: var(--bg-card) !important; border-color: var(--border) !important; }
+.maplibregl-ctrl-group button { color: var(--text-muted) !important; }

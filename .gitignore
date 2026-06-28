@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Data files — large rasters, gitignored; see data/README.md to download
+data/*/imagery.tif
+data/*/boundaries.tif
+
+# Input GeoJSONs — gitignored; see data/README.md to download
+data/*/input.geojson
+data/*/example_truths.geojson
+
+# predictions.geojson is NOT gitignored — it must be committed for submission
+# data/*/predictions.geojson
+
+# Outputs (except the .gitkeep marker)
+outputs/*
+!outputs/.gitkeep
+
+# Generated during quickstart / exploration
+patch_example.png
+
+# frontend build
+frontend/dist/
+frontend/node_modules/
+
+# env
+.env
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
