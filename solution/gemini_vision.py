@@ -59,7 +59,10 @@ MAX_PATCH_PX: int = 256
 CALL_DELAY_S: float = 13.0
 
 #: Maximum seconds to wait when retrying after a 429 / 503 response.
-MAX_RETRY_WAIT_S: float = 30.0
+MAX_RETRY_WAIT_S: float = 12.0
+
+#: Consecutive 429 failures before assuming daily quota is exhausted and bailing.
+MAX_CONSECUTIVE_FAILURES: int = 3
 
 #: Fraction of plots (by raw_confidence, lowest first) to analyse with Gemini.
 #: 0.30 = bottom 30 % of corrected plots.
@@ -176,7 +179,7 @@ class GeminiVisionAnalyzer:
         )
 
         updated = list(results)
-        done, skipped = 0, 0
+        done, skipped, consecutive_failures = 0, 0, 0
 
         from bhume.geo import open_imagery, patch_for_plot
         from pyproj import Transformer
@@ -186,6 +189,14 @@ class GeminiVisionAnalyzer:
 
         with open_imagery(self._imagery_path) as imagery_src:
             for list_idx in uncertain_idx:
+                if consecutive_failures >= MAX_CONSECUTIVE_FAILURES:
+                    log.warning(
+                        "GeminiVisionAnalyzer: %d consecutive failures — "
+                        "daily quota likely exhausted, bailing out early",
+                        consecutive_failures,
+                    )
+                    break
+
                 r  = results[list_idx]
                 pn = r.plot_number
 
@@ -214,7 +225,9 @@ class GeminiVisionAnalyzer:
                 gemini_conf = self._score_one(imagery_src, corrected_geom, patch_for_plot)
                 if gemini_conf is None:
                     skipped += 1
+                    consecutive_failures += 1
                     continue
+                consecutive_failures = 0  # reset on success
 
                 # Blend: classical carries more weight, Gemini adds an independent signal
                 blended_conf = (
