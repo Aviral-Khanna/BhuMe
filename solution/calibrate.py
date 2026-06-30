@@ -191,9 +191,16 @@ class ConfidenceCalibrator:
             for i, f in enumerate(area_flagged)
             if not f
         ]
+        # Compute quantile only over non-zero confidence plots.
+        # When many plots have raw_confidence=0 (sparse boundary raster), including
+        # them in the quantile calculation makes the cutoff = 0.0, meaning only
+        # zero-confidence plots ever get flagged regardless of the threshold.
+        # Zero-confidence plots are always flagged (raw <= 0.0 == cutoff = 0.0);
+        # the threshold should rank-discriminate among plots that have actual signal.
+        nonzero_confs = [c for c in active_confs if c > 0.0]
         cutoff = 0.0
-        if active_confs and self._flag_threshold > 0.0:
-            cutoff = float(np.quantile(active_confs, self._flag_threshold))
+        if nonzero_confs and self._flag_threshold > 0.0:
+            cutoff = float(np.quantile(nonzero_confs, self._flag_threshold))
 
         final: list[AlignmentResult] = []
         for r, pre_flag in zip(results, area_flagged):

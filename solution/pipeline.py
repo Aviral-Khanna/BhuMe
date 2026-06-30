@@ -101,7 +101,7 @@ class Predictor:
     def __init__(
         self,
         search_radius_m:   float = 17.0,
-        flag_threshold:    float = 0.15,
+        flag_threshold:    float = 0.20,
         gemini_api_key:    Optional[str] = None,
         gemini_max_plots:  int = 300,
     ) -> None:

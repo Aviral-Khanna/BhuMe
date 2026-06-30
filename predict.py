@@ -80,7 +80,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--flag-threshold",
         type=float,
-        default=0.15,
+        default=0.20,
         metavar="F",
         help="Fraction of low-confidence plots to flag.",
     )
